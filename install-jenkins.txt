@@ -1,0 +1,67 @@
+#1.main.tf
+
+resource "aws_instance" "instid" {
+  ami             = var.aws_instance_ami
+  key_name      = var.aws_instance_key
+  subnet_id     = var.aws_instance_subnet
+  instance_type = var.aws_instance_instancetype
+  security_groups = ["sg-0b513844f81b756fb"]
+  user_data     = <<-EOF
+                  #!/bin/bash
+                  sudo apt-get update
+                  sudo apt install -y openjdk-11-jre-headless 
+                  sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+                    https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+                  echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+                    https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+                    /etc/apt/sources.list.d/jenkins.list > /dev/null
+                  sudo apt-get update
+                  sudo apt-get install -y jenkins
+                  EOF
+  tags = {
+    Name = var.aws_instance_tag
+  }
+}
+
+
+#2.variable.tf
+
+
+
+variable "aws_instance_ami" { 
+type = string
+}
+
+variable "aws_instance_key" {
+ type = string
+}
+
+variable "aws_instance_subnet" {
+type = string
+}
+
+variable "aws_instance_instancetype" {
+type = string
+}
+
+variable "aws_instance_tag" {
+type = string
+}
+
+variable "instance_vpc" {
+type = string
+}
+
+
+
+#3variable.auto.tfvars
+
+
+
+
+aws_instance_ami="ami-03f4878755434977f"
+aws_instance_key="mumbai.key"
+aws_instance_subnet="subnet-06164e9e01bd4e62a"
+aws_instance_instancetype="t2.micro"
+aws_instance_tag="terraform"
+instance_vpc ="vpc-01fc104175af5b486"
