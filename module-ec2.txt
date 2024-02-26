@@ -1,0 +1,25 @@
+#1.module folder --->>> provider.tf file and moudule source:
+
+
+provider "aws" {
+  profile = "akanksha"
+}
+
+module "ec2" {
+  source = "/mnt/c/Users/SHREE/Desktop/module/Ec2"
+    
+}
+
+
+
+#2. module folder --->>> Ec2 folder----->>> main.tf file or variable.tf
+
+
+resource "aws_instance" "instance" {
+  ami           = "ami-03f4878755434977f"
+  instance_type = "t2.micro"
+
+  tags = {
+    Name = "ec2instance"
+  }
+}
